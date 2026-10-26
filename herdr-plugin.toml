@@ -1,0 +1,23 @@
+id = "sudo-askpass"
+name = "sudo askpass"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "When an agent runs sudo, ask for the password in a herdr pane beside it, so it works over SSH and from the phone"
+platforms = ["linux", "macos"]
+
+# Writes a stable launcher to the plugin's state dir: the install directory
+# changes on every update, SUDO_ASKPASS should not have to.
+[[startup]]
+command = ["sh", "install-shim.sh"]
+
+[[actions]]
+id = "setup"
+title = "sudo askpass: show setup"
+contexts = ["global", "workspace", "pane"]
+command = ["sh", "install-shim.sh", "--notify"]
+
+[[panes]]
+id = "prompt"
+title = "sudo password"
+placement = "split"
+command = ["bash", "prompt.sh"]
