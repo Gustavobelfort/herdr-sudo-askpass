@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.1.1
+
+- Fix the Nix package: files were copied under store-hashed names, so
+  `askpass.sh` was missing from it. herdr-installed copies were unaffected.
+
 ## 0.1.0
 
 - Ask for the sudo password in a herdr pane split below the agent.

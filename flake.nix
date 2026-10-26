@@ -18,8 +18,11 @@
       packages = forAll (pkgs: {
         default = pkgs.runCommand "herdr-sudo-askpass" { } ''
           mkdir $out
-          cp ${./herdr-plugin.toml} $out/herdr-plugin.toml
-          cp ${./askpass.sh} ${./prompt.sh} ${./install-shim.sh} $out/
+          # Copied by name from the source tree: copying each file's own store
+          # path would keep its hash in the file name.
+          for f in herdr-plugin.toml askpass.sh prompt.sh install-shim.sh; do
+            cp ${./.}/$f $out/$f
+          done
         '';
       });
 
@@ -35,6 +38,15 @@
       });
 
       checks = forAll (pkgs: {
+        # The package must hold exactly the files the manifest and SUDO_ASKPASS name.
+        package = pkgs.runCommand "herdr-sudo-askpass-package-check" { } ''
+          for f in herdr-plugin.toml askpass.sh prompt.sh install-shim.sh; do
+            test -f ${
+              self.packages.${pkgs.stdenv.hostPlatform.system}.default
+            }/$f || { echo "missing $f"; exit 1; }
+          done
+          touch $out
+        '';
         default =
           pkgs.runCommand "herdr-sudo-askpass-check"
             {

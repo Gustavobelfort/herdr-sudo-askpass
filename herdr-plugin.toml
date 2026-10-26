@@ -1,6 +1,6 @@
 id = "sudo-askpass"
 name = "sudo askpass"
-version = "0.1.0"
+version = "0.1.1"
 min_herdr_version = "0.9.0"
 description = "When an agent runs sudo, ask for the password in a herdr pane beside it, so it works over SSH and from the phone"
 platforms = ["linux", "macos"]
