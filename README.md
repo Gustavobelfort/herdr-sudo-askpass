@@ -1,5 +1,7 @@
 # herdr-sudo-askpass
 
+[![check](https://github.com/Gustavobelfort/herdr-sudo-askpass/actions/workflows/check.yml/badge.svg)](https://github.com/Gustavobelfort/herdr-sudo-askpass/actions/workflows/check.yml)
+
 A [herdr](https://herdr.dev) plugin. When a coding agent runs `sudo`, the
 password prompt opens as a pane right beside the agent:
 
@@ -63,6 +65,15 @@ Environment variables, set alongside `SUDO_ASKPASS`:
 | `HERDR_SUDO_ASKPASS_TIMEOUT` | `300` | seconds to wait for an answer |
 | `HERDR_SUDO_ASKPASS_FALLBACK` | | askpass program to use outside herdr |
 
+## Nix
+
+The flake's `packages.default` is the plugin directory; link it declaratively,
+for example from a Home Manager activation script:
+
+```nix
+herdr plugin link ${inputs.herdr-sudo-askpass.packages.${system}.default}
+```
+
 ## Security
 
 The password travels from the prompt pane to the waiting helper through a FIFO
@@ -71,7 +82,9 @@ when the helper exits. It is never written to disk or passed on a command line.
 
 Any process running as you can already open herdr panes and type into them, so
 this adds no new trust boundary. It does mean an agent can _ask_ for root:
-read the command shown in the pane before typing.
+read the command shown in the pane before typing. The full threat model is in
+[docs/design.md](docs/design.md#threat-model); report vulnerabilities as
+described in [SECURITY.md](SECURITY.md).
 
 ## Requirements
 
@@ -80,9 +93,13 @@ herdr 0.9.0 or newer, `bash`, and `mkfifo`. Linux and macOS.
 ## Development
 
 ```sh
+nix develop           # or install shellcheck, shfmt and make
 herdr plugin link .   # use your checkout
-test/test.sh          # runs against a fake herdr, no server needed
+make check            # lint, format check, tests against a fake herdr
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Coding agents: read
+[AGENTS.md](AGENTS.md).
 
 ## License
 

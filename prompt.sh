@@ -4,7 +4,10 @@
 set -u
 reply="${HERDR_SUDO_ASKPASS_REPLY:?not started by askpass.sh}"
 
-answer() { [ -p "$reply" ] && printf '%s\n' "$1" >"$reply"; exit 0; }
+answer() {
+  [ -p "$reply" ] && printf '%s\n' "$1" >"$reply"
+  exit 0
+}
 # Ctrl+C, or closing the pane, cancels instead of leaving sudo to time out.
 trap 'echo; answer cancel' INT HUP TERM
 
