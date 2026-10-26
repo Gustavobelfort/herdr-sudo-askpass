@@ -37,5 +37,5 @@ rc=$?
 check "no answer times out" "$rc" "1"
 out=$(HERDR_SUDO_ASKPASS_FALLBACK="$(type -P echo)" HERDR_PANE_ID='' bash "$root/askpass.sh" "x")
 check "outside herdr uses fallback" "$out" "x"
-check "no fifo left behind" "$(find "$tmp" -name 'herdr-sudo-askpass.*' | wc -l)" "0"
+check "no fifo left behind" "$(find "$tmp" -name 'herdr-sudo-askpass.*' | wc -l | tr -d " ")" "0"
 exit $fail
